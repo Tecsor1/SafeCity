@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Button, TextInput } from 'react-native';
 import { auth, database, createUserWithEmailAndPassword, signInWithEmailAndPassword } from './firebaseConfig';
 import CameraComponent from './CameraComponent';
+import { uploadImage } from './storage';
 
 export default function App() {
   const [email, setEmail] = useState('');
@@ -26,6 +27,7 @@ export default function App() {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Registered with:', user.email);
+        setUser(user);
       })
       .catch(error => console.log(error.message));
   };
@@ -35,29 +37,38 @@ export default function App() {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Logged in with:', user.email);
+        setUser(user);
       })
       .catch(error => console.log(error.message));
   };
 
-  if (user === null) {
-    return (
-      <View>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <Button title="Sign Up" onPress={handleSignUp} />
-        <Button title="Sign In" onPress={handleSignIn} />
-      </View>
-    );
+  const handleTakePicture = (photo) => {
+    uploadImage(photo.uri, user.uid).then(() => {
+      console.log('Photo uploaded!');
+    }).catch((error) => {
+      console.log('Error uploading photo:', error);
+    });
+  };
+
+  if (user) {
+    return <CameraComponent onTakePicture={handleTakePicture} />;
   }
 
-  return <CameraComponent />;
+  return (
+    <View>
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <Button title="Sign Up" onPress={handleSignUp} />
+      <Button title="Sign In" onPress={handleSignIn} />
+    </View>
+  );
 }
