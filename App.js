@@ -43,7 +43,8 @@ export default function App() {
   };
 
   const handleTakePicture = (photo) => {
-    uploadImage(photo.uri, user.uid).then(() => {
+    const timestamp = Date.now();
+    uploadImage(photo.uri, `${user.uid}_${timestamp}`).then(() => {
       console.log('Photo uploaded!');
     }).catch((error) => {
       console.log('Error uploading photo:', error);
