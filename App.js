@@ -4,11 +4,13 @@ import { View, Button, TextInput } from 'react-native';
 import { auth, database, createUserWithEmailAndPassword, signInWithEmailAndPassword } from './firebaseConfig';
 import CameraComponent from './CameraComponent';
 import { uploadImage } from './storage';
+import DashboardScreen from './DashboardScreen';
 
 export default function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
+  const [isCameraOpen, setCameraOpen] = useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
@@ -51,8 +53,26 @@ export default function App() {
     });
   };
 
+
+  const handleOpenCamera = () => {
+    setCameraOpen(true);
+  };
+
+  const handleCloseCamera = () => {
+    setCameraOpen(false);
+  };
+
+  const handleSearch = (searchTerm) => {
+    // TODO: implement search
+    console.log('Search:', searchTerm);
+  };
+
   if (user) {
-    return <CameraComponent onTakePicture={handleTakePicture} />;
+    if (isCameraOpen) {
+      return <CameraComponent onTakePicture={handleTakePicture} onClose={handleCloseCamera} />;
+    } else {
+      return <DashboardScreen onOpenCamera={handleOpenCamera} onSearch={handleSearch} />;
+    }
   }
 
   return (
