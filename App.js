@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Button, TextInput } from 'react-native';
 import { auth, database, createUserWithEmailAndPassword, signInWithEmailAndPassword } from './src/services/firebase/firebaseConfig';
-import CameraComponent from './src/components/camera/CameraComponent';
+import CameraComponent from './src/components/CameraComponent';
 import { uploadImage, saveImageMetadata } from './src/services/storage/storage';
-import DashboardScreen from './src/components/dashboard/DashboardScreen';
-import ImageDetailsScreen from './src/components/image/ImageDetailsScreen';
+import DashboardScreen from './src/components/DashboardScreen';
+import ImageDetailsScreen from './src/components/ImageDetailsScreen';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
-import ImageInfoScreen from './src/components/image/ImageInfoScreen';
+import ImageInfoScreen from './src/components/ImageInfoScreen';
 
 export default function App() {
   const [email, setEmail] = useState('');

@@ -1,8 +1,8 @@
 // ImageInfoScreen.js
 import React from 'react';
 import { View, Text, Image, Button } from 'react-native';
-import { deleteImage } from '../../services/storage/storage';
-import { auth } from '../../services/firebase/firebaseConfig';
+import { deleteImage } from '../services/storage/storage';
+import { auth } from '../services/firebase/firebaseConfig';
 
 
 export default function ImageInfoScreen({ image, onBack }) {
