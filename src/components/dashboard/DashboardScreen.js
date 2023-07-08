@@ -1,9 +1,9 @@
 // DashboardScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, Button, TextInput, FlatList, Image, Text, TouchableOpacity } from 'react-native';
-import { auth, signOut } from './firebaseConfig';
+import { auth, signOut } from '../../services/firebase/firebaseConfig';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
-import ImageInfoScreen from './ImageInfoScreen';
+import ImageInfoScreen from '../image/ImageInfoScreen';
 
 export default function DashboardScreen({ onOpenCamera, onSearch, setIsImageInfoOpen, setImageSelected }) {
   const [searchTerm, setSearchTerm] = useState('');
