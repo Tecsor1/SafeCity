@@ -31,12 +31,19 @@ export default function CameraComponent({ onTakePicture }) {
                         flex: 1,
                         backgroundColor: 'transparent',
                         flexDirection: 'row',
+                        justifyContent: 'space-around',
+                        alignItems: 'flex-end'
                     }}>
                     <TouchableOpacity
                         style={{
-                            flex: 0.1,
+                            flex: 0.2,
                             alignSelf: 'flex-end',
                             alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'rgba(0,0,0,0.3)',
+                            borderRadius: 5,
+                            paddingHorizontal: 10,
+                            margin: 20,
                         }}
                         onPress={() => {
                             setType(
@@ -49,9 +56,14 @@ export default function CameraComponent({ onTakePicture }) {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{
-                            flex: 0.1,
+                            flex: 0.5,  // Se incrementó el flex a 0.5
                             alignSelf: 'flex-end',
                             alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'rgba(0,0,0,0.3)',
+                            borderRadius: 5,
+                            paddingHorizontal: 10,
+                            margin: 20,
                         }}
                         onPress={async () => {
                             if(cameraRef){
