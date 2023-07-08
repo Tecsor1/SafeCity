@@ -7,6 +7,7 @@ import { uploadImage, saveImageMetadata } from './storage';
 import DashboardScreen from './DashboardScreen';
 import ImageDetailsScreen from './ImageDetailsScreen';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import ImageInfoScreen from './ImageInfoScreen';
 
 export default function App() {
   const [email, setEmail] = useState('');
@@ -16,6 +17,8 @@ export default function App() {
   const db = getFirestore();
   const [imageDetails, setImageDetails] = useState({ name: '', address: '' });
   const [isImageDetailsOpen, setImageDetailsOpen] = useState(false);
+  const [isImageInfoOpen, setIsImageInfoOpen] = useState(false);
+  const [imageSelected, setImageSelected] = useState(null);
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
@@ -107,8 +110,10 @@ export default function App() {
       return <CameraComponent onTakePicture={handleTakePicture} onClose={handleCloseCamera} />;
     } else if (isImageDetailsOpen) {
       return <ImageDetailsScreen onUpload={handleUploadImage} details={imageDetails} setDetails={setImageDetails} />;
+    } else if (isImageInfoOpen) {
+      return <ImageInfoScreen image={imageSelected} onBack={() => setIsImageInfoOpen(false)} />;
     } else {
-      return <DashboardScreen onOpenCamera={handleOpenCamera} onSearch={handleSearch} />;
+      return <DashboardScreen onOpenCamera={handleOpenCamera} onSearch={handleSearch} setIsImageInfoOpen={setIsImageInfoOpen} setImageSelected={setImageSelected} />
     }
   }
 

@@ -1,13 +1,16 @@
 // DashboardScreen.js
 import React, { useState } from 'react';
-import { View, Button, TextInput, FlatList, Image, Text } from 'react-native';
+import { View, Button, TextInput, FlatList, Image, Text, TouchableOpacity } from 'react-native';
 import { auth, signOut } from './firebaseConfig';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import ImageInfoScreen from './ImageInfoScreen';
 
-export default function DashboardScreen({ onOpenCamera, onSearch }) {
+export default function DashboardScreen({ onOpenCamera, onSearch, setIsImageInfoOpen, setImageSelected }) {
   const [searchTerm, setSearchTerm] = useState('');
   const db = getFirestore();
   const [searchResults, setSearchResults] = useState([]);
+
+
 
 
   const handleSignOut = () => {
@@ -17,6 +20,12 @@ export default function DashboardScreen({ onOpenCamera, onSearch }) {
       console.log('Error signing out:', error);
     });
   };
+
+  const handleImageSelect = (imageData) => {
+    setImageSelected(imageData);
+    setIsImageInfoOpen(true);
+  };
+  
 
  
 const handleSearch = async () => {
@@ -39,18 +48,21 @@ return (
     <Button title="Sign Out" onPress={handleSignOut} />
     
     <FlatList
-      data={searchResults}
-      keyExtractor={item => item.name}
-      renderItem={({ item }) => (
-        <View style={{ flexDirection: 'row', margin: 10 }}>
-          <Image
-            source={{ uri: item.url }}
-            style={{ width: 50, height: 50 }}
-          />
-          <Text>{item.name}</Text>
-        </View>
-      )}
-    />
+  data={searchResults}
+  keyExtractor={item => item.name}
+  renderItem={({ item }) => (
+    <TouchableOpacity onPress={() => handleImageSelect(item)}>
+      <View style={{ flexDirection: 'row', margin: 10 }}>
+        <Image
+          source={{ uri: item.url }}
+          style={{ width: 50, height: 50 }}
+        />
+        <Text>{item.name}</Text>
+      </View>
+    </TouchableOpacity>
+  )}
+/>
+
   </View>
 );
 }
