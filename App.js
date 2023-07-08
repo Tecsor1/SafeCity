@@ -71,17 +71,24 @@ export default function App() {
       const q = query(collection(db, "images"), where("name", "==", searchTerm));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
+        const results = [];
         querySnapshot.forEach((doc) => {
           console.log(doc.id, " => ", doc.data());
+          results.push(doc.data());
         });
+        return results; // Retorna los resultados de la búsqueda
       } else {
         console.log('No se encontró ninguna imagen con ese nombre');
+        return []; // Retorna un array vacío si no hay resultados
       }
       
     } catch (error) {
       console.log('Error al buscar:', error); // Este mensaje mostrará cualquier error que pueda surgir
+      return []; // Retorna un array vacío si ocurre un error
     }
   };
+  
+  
   
   const handleUploadImage = () => {
     setImageDetailsOpen(false);
