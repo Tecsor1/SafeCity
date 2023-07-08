@@ -5,12 +5,14 @@ import { auth, database, createUserWithEmailAndPassword, signInWithEmailAndPassw
 import CameraComponent from './CameraComponent';
 import { uploadImage } from './storage';
 import DashboardScreen from './DashboardScreen';
+import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 
 export default function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [isCameraOpen, setCameraOpen] = useState(false);
+  const db = getFirestore();
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
@@ -46,13 +48,16 @@ export default function App() {
 
   const handleTakePicture = (photo) => {
     const timestamp = Date.now();
-    uploadImage(photo.uri, `${user.uid}_${timestamp}`).then(() => {
+    const imageName = `${user.uid}_${timestamp}`;
+    uploadImage(photo.uri, imageName).then((imageUrl) => {
       console.log('Photo uploaded!');
+      saveImageMetadata(imageName, imageUrl, user.uid).then(() => {
+        console.log('Image metadata saved!');
+      });
     }).catch((error) => {
       console.log('Error uploading photo:', error);
     });
   };
-
 
   const handleOpenCamera = () => {
     setCameraOpen(true);
@@ -62,10 +67,24 @@ export default function App() {
     setCameraOpen(false);
   };
 
-  const handleSearch = (searchTerm) => {
-    // TODO: implement search
-    console.log('Search:', searchTerm);
+  const handleSearch = async (searchTerm) => {
+    try {
+      console.log('Buscando:', searchTerm); // Este mensaje se mostrará cuando se inicie la búsqueda
+      const q = query(collection(db, "images"), where("name", "==", searchTerm));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach((doc) => {
+          console.log(doc.id, " => ", doc.data());
+        });
+      } else {
+        console.log('No se encontró ninguna imagen con ese nombre');
+      }
+      
+    } catch (error) {
+      console.log('Error al buscar:', error); // Este mensaje mostrará cualquier error que pueda surgir
+    }
   };
+  
 
   if (user) {
     if (isCameraOpen) {

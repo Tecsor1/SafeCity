@@ -7,14 +7,13 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAZqW1SrJfhFdBA7DsD3SWtpHKpSIfqWzk",
-  authDomain: "computacionmovil-df4d5.firebaseapp.com",
-  projectId: "computacionmovil-df4d5",
-  storageBucket: "computacionmovil-df4d5.appspot.com",
-  messagingSenderId: "945101501286",
-  appId: "1:945101501286:web:adb4df2a6a80cd166f0ea7",
-  measurementId: "G-EQ86NKE86F",
-  databaseURL: "https://computacionmovil-df4d5-default-rtdb.firebaseio.com/",
+  apiKey: "AIzaSyA2v4uGH4C7pffMeb51e8-UXcv1f90Lchg",
+  authDomain: "ropadon-66562.firebaseapp.com",
+  projectId: "ropadon-66562",
+  storageBucket: "ropadon-66562.appspot.com",
+  messagingSenderId: "556483273672",
+  appId: "1:556483273672:web:45d4378a7d1ef2a246d6fd",
+  measurementId: "G-Y7CMXGX4YH"
 };
 
 // Initialize Firebase
