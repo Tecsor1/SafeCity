@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Button, TextInput } from 'react-native';
 import { auth, database, createUserWithEmailAndPassword, signInWithEmailAndPassword } from './firebaseConfig';
 import CameraComponent from './CameraComponent';
-import { uploadImage } from './storage';
+import { uploadImage, saveImageMetadata } from './storage';
 import DashboardScreen from './DashboardScreen';
+import ImageDetailsScreen from './ImageDetailsScreen';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 
 export default function App() {
@@ -13,6 +14,8 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [isCameraOpen, setCameraOpen] = useState(false);
   const db = getFirestore();
+  const [imageDetails, setImageDetails] = useState({ name: '', address: '' });
+  const [isImageDetailsOpen, setImageDetailsOpen] = useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
@@ -49,14 +52,9 @@ export default function App() {
   const handleTakePicture = (photo) => {
     const timestamp = Date.now();
     const imageName = `${user.uid}_${timestamp}`;
-    uploadImage(photo.uri, imageName).then((imageUrl) => {
-      console.log('Photo uploaded!');
-      saveImageMetadata(imageName, imageUrl, user.uid).then(() => {
-        console.log('Image metadata saved!');
-      });
-    }).catch((error) => {
-      console.log('Error uploading photo:', error);
-    });
+    setImageDetails({ ...imageDetails, photo: photo, name: imageName });
+    setCameraOpen(false);
+    setImageDetailsOpen(true);
   };
 
   const handleOpenCamera = () => {
@@ -85,10 +83,23 @@ export default function App() {
     }
   };
   
+  const handleUploadImage = () => {
+    setImageDetailsOpen(false);
+    uploadImage(imageDetails.photo.uri, imageDetails.name).then((imageUrl) => {
+      console.log('Photo uploaded!');
+      saveImageMetadata(imageDetails.name, imageUrl, user.uid, imageDetails.address).then(() => {
+        console.log('Image metadata saved!');
+      });
+    }).catch((error) => {
+      console.log('Error uploading photo:', error);
+    });
+  };
 
   if (user) {
     if (isCameraOpen) {
       return <CameraComponent onTakePicture={handleTakePicture} onClose={handleCloseCamera} />;
+    } else if (isImageDetailsOpen) {
+      return <ImageDetailsScreen onUpload={handleUploadImage} details={imageDetails} setDetails={setImageDetails} />;
     } else {
       return <DashboardScreen onOpenCamera={handleOpenCamera} onSearch={handleSearch} />;
     }
