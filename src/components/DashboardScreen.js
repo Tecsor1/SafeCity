@@ -11,21 +11,22 @@ export default function DashboardScreen({ onOpenCamera, onSearch, setIsImageInfo
   const [searchResults, setSearchResults] = useState([]);
   const [viewingUserPhotos, setViewingUserPhotos] = useState(false);
   const [userPhotos, setUserPhotos] = useState([]);
-  
+
   useEffect(() => {
+    fetchUserPhotos();
+  }, [userPhotos]);
+  
+  const fetchUserPhotos = async () => {
     if(auth.currentUser) {
-      const fetchUserPhotos = async () => {
-        const q = query(collection(db, "images"), where("userId", "==", auth.currentUser.uid));
-        const querySnapshot = await getDocs(q);
-        let results = [];
-        querySnapshot.forEach((doc) => {
-          results.push(doc.data());
-        });
-        setUserPhotos(results);
-      }
-      fetchUserPhotos();
+      const q = query(collection(db, "images"), where("userId", "==", auth.currentUser.uid));
+      const querySnapshot = await getDocs(q);
+      let results = [];
+      querySnapshot.forEach((doc) => {
+        results.push(doc.data());
+      });
+      setUserPhotos(results);
     }
-  }, []);
+  }
 
   const handleSignOut = () => {
     signOut(auth).then(() => {
