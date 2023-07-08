@@ -32,14 +32,18 @@ export const uploadImage = async (uri, imageName) => {
     });
 };
 
-export async function saveImageMetadata(imageName, imageUrl, userId, address) {
+export async function saveImageMetadata(imageName, imageUrl, userId, address, size, color, brand) {
     await setDoc(doc(db, "images", imageName), {
       name: imageName,
       url: imageUrl,
       userId: userId,
-      address: address
+      address: address,
+      size: size,
+      color: color,
+      brand: brand
     });
-  };
+};
+
   
   export const deleteImage = async (imageName) => {
     const imageRef = ref(storage, imageName);

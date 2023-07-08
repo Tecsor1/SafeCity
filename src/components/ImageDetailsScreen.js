@@ -15,7 +15,24 @@ export default function ImageDetailsScreen({ onUpload, details, setDetails }) {
         value={details.address}
         onChangeText={(text) => setDetails({ ...details, address: text })}
       />
+      <TextInput
+        placeholder="Size"
+        value={details.size}
+        onChangeText={(text) => setDetails({ ...details, size: text })}
+      />
+      <TextInput
+        placeholder="Color"
+        value={details.color}
+        onChangeText={(text) => setDetails({ ...details, color: text })}
+      />
+      <TextInput
+        placeholder="Brand"
+        value={details.brand}
+        onChangeText={(text) => setDetails({ ...details, brand: text })}
+      />
       <Button title="Upload" onPress={onUpload} />
     </View>
   );
 }
+
+

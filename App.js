@@ -15,7 +15,8 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [isCameraOpen, setCameraOpen] = useState(false);
   const db = getFirestore();
-  const [imageDetails, setImageDetails] = useState({ name: '', address: '' });
+const [imageDetails, setImageDetails] = useState({ name: '', address: '', size: '', color: '', brand: '' });
+
   const [isImageDetailsOpen, setImageDetailsOpen] = useState(false);
   const [isImageInfoOpen, setIsImageInfoOpen] = useState(false);
   const [imageSelected, setImageSelected] = useState(null);
@@ -54,7 +55,7 @@ export default function App() {
 
   const handleTakePicture = (photo) => {
     const timestamp = Date.now();
-    const imageName = `${user.uid}_${timestamp}`;
+    const imageName = ``;
     setImageDetails({ ...imageDetails, photo: photo, name: imageName });
     setCameraOpen(false);
     setImageDetailsOpen(true);
@@ -95,15 +96,26 @@ export default function App() {
   
   const handleUploadImage = () => {
     setImageDetailsOpen(false);
-    uploadImage(imageDetails.photo.uri, imageDetails.name).then((imageUrl) => {
+  
+    let imageName = imageDetails.name;
+    if (!imageName) {
+      const timestamp = Date.now();
+      imageName = `${user.uid}_${timestamp}`;
+    }
+  
+    uploadImage(imageDetails.photo.uri, imageName).then((imageUrl) => {
       console.log('Photo uploaded!');
-      saveImageMetadata(imageDetails.name, imageUrl, user.uid, imageDetails.address).then(() => {
+      saveImageMetadata(imageName, imageUrl, user.uid, imageDetails.address, imageDetails.size, imageDetails.color, imageDetails.brand).then(() => {
         console.log('Image metadata saved!');
+        setImageDetails({ photo: null, name: '', address: '', size: '', color: '', brand: '' }); // Reset image details after upload
       });
     }).catch((error) => {
       console.log('Error uploading photo:', error);
     });
   };
+  
+
+  
 
   if (user) {
     if (isCameraOpen) {
