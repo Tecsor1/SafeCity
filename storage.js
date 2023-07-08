@@ -1,6 +1,6 @@
 // src/services/storage.js
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+import { getFirestore, doc, setDoc, deleteDoc } from "firebase/firestore";
 
 const storage = getStorage();
 const db = getFirestore();
@@ -41,3 +41,12 @@ export async function saveImageMetadata(imageName, imageUrl, userId, address) {
     });
   };
   
+  export const deleteImage = async (imageName) => {
+    const imageRef = ref(storage, imageName);
+
+    // Delete the file
+    await deleteObject(imageRef);
+
+    // Delete the file details from Firestore
+    await deleteDoc(doc(db, "images", imageName));
+};
